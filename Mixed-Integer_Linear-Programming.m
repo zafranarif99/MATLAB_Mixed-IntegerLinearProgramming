@@ -1,5 +1,5 @@
-%% MATH 464 FINAL PROJECT - MULTI PERIOD TEAM ASSIGNMENT PLANNING
-% Zafran Arif - 11594791
+%% MULTI PERIOD TEAM ASSIGNMENT PLANNING
+% Zafran Arif
 
 %% Data & Calculation
 % Productivity scores of staff members
