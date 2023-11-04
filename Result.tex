@@ -1,0 +1,323 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{indentfirst}
+\usepackage{enumitem}
+\usepackage{verbatim}
+
+\title{EndGameSolutions Final Report}
+\author{Zafran A. Arif}
+\date{Spring 2022}
+\parskip=1.5ex
+\oddsidemargin=0mm
+\textwidth=6.5in
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\pagebreak
+
+\section{Introduction}
+I would like to say thank you to \textit{EndGameSolutions} for trusting me to assist your company in working on a team-building project. The given problem and supplied data have been reviewed by me and I will provide several mathematical models and the solution for the problem in this report. This project is very interesting and challenging at the same time since there are many conditions to satisfy. I will be using Linear Optimization to solve the problems and MATLAB to assist me with the numbers.
+
+\section{Project Description and Guide}
+The title of this project is \textbf{Multi-period Team Assignment Planning}. From the given data, I noticed that we have five different projects for the next nine weeks. The timelines and team size for each project are given in this table:
+
+\begin{table}[h!]
+    \begin{center}
+        \begin{tabular}{|a|b|c|d|e|f|}
+        \hline
+        \textbf{Project Name}\hspace{4em}& Au\hspace{1em}& Br\hspace{1em}& Cs\hspace{1em}& Dy\hspace{1em}& Eu\\
+        Time Window (first week - last week) & 1-3\hspace{1em}& 4-5\hspace{1em}& 6-9\hspace{1em}& 1-4\hspace{1em}&5-9\\
+        Team Size (min - max) & 5-8\hspace{1em}&5-9\hspace{1em}&6-12\hspace{1em}&6-11\hspace{1em}&8-15\\
+        \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+I have received the Excel file (\textit{EndGameSolutions.xlsx}) containing all scores for each of the 50 available staff members. All these 50 available staff members has been recently rated and given scores, ranging from 0 to 100, for productivity, creativity and teamwork. A sample is shown in this table:
+
+\begin{table}[h!]
+    \begin{center}
+        \begin{tabular}{|a|b|c|d|}
+        \hline
+        Staff Member\hspace{4em}& Productivity\hspace{1em}& Creativity\hspace{1em}& Teamwork\\
+        \hline
+        1 & 96\hspace{1em}& 85\hspace{1em}& 61\hspace{1em}\\
+        2 & 42\hspace{1em}&59\hspace{1em}&10\hspace{1em}\\
+        ...&...&...&...\\
+        50&63&85&32\\
+        \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+From the given data above, I understand that \textit{EndGameSolutions} would like to maximize the total productivity by assigning 50 available staff members to the projects subject to the following conditions:
+\begin{enumerate}[noitemsep,nolistsep]
+    \item The average productivity score of staff assigned to each project should be at least 70.
+    \item The average creativity score of staff assigned to each project should be at least 50.
+    \item The average teamwork score of staff assigned to each project should be at least 50.
+    \item A given staff member can be assigned to more than one project as long as the projects do not overlap in time. (No one can work more than one project at a time.)
+    \item At least one senior staff member must be assigned to each project, and no senior staff member can be assigned to more than one project.
+    \item Not all staff need to be assigned to a project.
+   % \item At least 34 staff should be assigned to at least one project. (The remaining 16 or fewer will participate in other company work.)
+\end{enumerate}
+
+\section{Mathematical Models for Each Conditions}
+First of all, let's define the decision variable $x_{ij}$ as the number of staff members $i$ in a certain project $j$ where $i = 1,...,50$ and $j = 1,2,3,4,5$. Moreover, we need to assign the staff members to each project, thus
+
+\[
+x_{ij} =
+\begin{cases}
+    1 & \text{if staff member $i$ is assigned to project $j$}\\
+    0 & \text{otherwise.}
+\end{cases}
+\]
+
+Let $p_i$ be the productivity scores, $c_i$ be the creativity scores, and $t_i$ be the teamwork scores of the staff members. We are required to maximize the total productivity of all assigned staff members to every projects. Let $z$ be our objective variable, then we have the objective function\\
+
+\[ z = \sum_{i=1}^{50}\sum_{j=1}^{5} p_ix_{ij} \]
+
+In the formula above, we are summing all of the productivity to each staff members.
+
+\subsection{First Condition}
+We are asked to set the standard for \textit{EndGameSolutions} by setting the minimum average productivity score to of staff assigned to each project to 70.
+
+\[\frac{\sum_{i=1}^{50} p_ix_{ij}}{\sum_{i=1}^{50}x_{ij}} \ge 70 \hspace{1em}\text{for $j=1,...,5$}\]
+\[\text{or}\]
+\[\sum_{i=1}^{50} (p_i-70)x_{ij} \ge 0 \hspace{1em}\text{for $j=1,...,5$}\]
+
+\subsection{Second Condition}
+We are asked to set the standard for \textit{EndGameSolutions} by setting the minimum average creativity score to of staff assigned to each project to 50.
+
+\[\frac{\sum_{i=1}^{50} c_ix_{ij}}{\sum_{i=1}^{50}x_{ij}} \ge 50 \hspace{1em}\text{for $j=1,...,5$}\]
+\[\text{or}\]
+\[\sum_{i=1}^{50} (c_i-50)x_{ij} \ge 0 \hspace{1em}\text{for $j=1,...,5$}\]
+
+\subsection{Third Condition}
+We are asked to set the standard for \textit{EndGameSolutions} by setting the minimum average teamwork score to of staff assigned to each project to 50.
+
+\[\frac{\sum_{i=1}^{50} t_ix_{ij}}{\sum_{i=1}^{50}x_{ij}} \ge 50 \hspace{1em}\text{for $j=1,...,5$}\]
+\[\text{or}\]
+\[\sum_{i=1}^{50} (t_i-50)x_{ij} \ge 0 \hspace{1em}\text{for $j=1,...,5$}\]
+
+\subsection{Fourth Condition}
+In this condition, we are required to make sure that a staff member can be assigned to more than one project as long as the projects do not overlap in time.
+
+Notice that four projects are overlapping in time: Project Au \& Dy, project Br \& Dy, project Br \& Eu, and project Cs \& Eu. Recall that Au is the first project, Dy is the fourth, Cs is the third, and Eu is the fifth, so we're going to call them $j$ for the respective numbers. 
+
+Thus, for $i = 1,...,50$, we have the equations for the overlapping projects
+
+\[\textbf{Au \& Dy:}\hspace{1em} x_{i1} + x_{i4} \le 1\]
+\[\textbf{Br \& Dy:}\hspace{1em} x_{i2} + x_{i4} \le 1\]
+\[\textbf{Br \& Eu:}\hspace{1em} x_{i2} + x_{i5} \le 1\]
+\[\textbf{Cs \& Eu:}\hspace{1em} x_{i3} + x_{i5} \le 1\]
+
+
+\subsection{Fifth Condition}
+Now, we're asked to make sure that at least one senior staff member be assigned to each project, but they can't be in more than one project.
+
+The model for at least one senior staff member be assigned to each project is
+\[\sum_{i=1}^{8} x_{ij} \ge 1 \hspace{1em}\text{for $j = 1,2,3,4,5$}\]
+
+The model for the senior staff can't be in more than one project is
+\[\sum_{j=1}^{5} x_{ij} \le 1 \hspace{1em}\text{for $i=1,...,8$}\]
+
+
+\subsection{Sixth Condition}
+Although that \textit{EndGameSolutions} has 50 available staff members, not all staff need to be assigned to a project. No mathematical model needed for this condition.
+
+\subsection{Seventh Condition}
+Remember that each project has different team size, thus
+\[\text{The team size of Project Au:} \hspace{1em} 5 \le \sum_{i=1}^{50} x_{i1} \le 8\]
+\[\text{The team size of Project Br:} \hspace{1em} 5 \le \sum_{i=1}^{50} x_{i2} \le 9\]
+\[\text{The team size of Project Cs:} \hspace{1em} 6 \le \sum_{i=1}^{50} x_{i3} \le 12\]
+\[\text{The team size of Project Dy:} \hspace{1em} 6 \le \sum_{i=1}^{50} x_{i4} \le 11\]
+\[\text{The team size of Project Eu:} \hspace{1em} 5 \le \sum_{i=1}^{50} x_{i5} \le 15\]
+
+
+\begin{comment}
+\subsection{Eighth Condition*}
+At least 34 staff should be assigned to at least one project (The remaining 16 or fewer will participate in other company work). This problem required an advanced mathematical modeling, so we're going to skip it for now.*
+\[\sum_{i=5}^{50}\sum_{j=1}^{5}x_{ij} - 16 \ge 1\]
+\end{comment}
+
+
+
+\section{Final Mathematical Model}
+\begin{equation}
+    \begin{aligned}
+        &\underset{x}{\text{max}}\nonumber\hspace{1em} && z = \sum_{i=1}^{50}\sum_{j=1}^{5} p_ix_{ij}\\
+        &\text{s.t.} & &  \sum_{i=1}^{50} (p_i-70)x_{ij} \ge 0 \hspace{1em}\text{for $j = 1,2,3,4,5$}\\
+        & & &  \sum_{i=1}^{50} (c_i-50)x_{ij} \ge 0 \hspace{1em}\text{for $j = 1,2,3,4,5$} \\
+        &&& \sum_{i=1}^{50} (t_i-50)x_{ij} \ge 0 \hspace{1em}\text{for $j = 1,2,3,4,5$}\\
+        &&& x_{i1} + x_{i4} \le 1 \hspace{1em}\text{for $i = 1,..., 50$}\\
+        &&& x_{i2} + x_{i4} \le 1 \hspace{1em}\text{for $i = 1,..., 50$}\\
+        &&& x_{i2} + x_{i5} \le 1 \hspace{1em}\text{for $i = 1,..., 50$}\\
+        &&& x_{i3} + x_{i5} \le 1 \hspace{1em}\text{for $i = 1,..., 50$}\\
+        &&& \sum_{i=1}^{8} x_{ij} \ge 1 \hspace{1em}\text{for $j = 1,2,3,4,5$}\\
+        &&& \sum_{j=1}^{5} x_{ij} \le 1 \hspace{1em}\text{for $i=1,..., 8$}\\
+        %&&& \sum_{i=5}^{50}\sum_{j=1}^{5}x_{ij} - 16 \ge 1\\
+        &&& 5 \le \sum_{i=1}^{50} x_{i1} \le 8\\
+        &&& 5 \le \sum_{i=1}^{50} x_{i2} \le 9\\
+        &&& 6 \le \sum_{i=1}^{50} x_{i3} \le 12\\
+        &&& 6 \le \sum_{i=1}^{50} x_{i4} \le 11\\
+        &&& 5 \le \sum_{i=1}^{50} x_{i5} \le 15\\
+        &&&  x_{ij} \in \mathbb{Z}\\
+    \end{aligned}
+\end{equation}
+\pagebreak
+
+\section{Result}
+After doing several calculations to the model that we have created, we can see that \textit{EndGameSolutions} need to spread their staff members into the projects to get an optimal solution. I introduce a strategy where we get the best total productivity and here is a table to help us visualize the optimal solution.
+
+\begin{table}[h!]
+    \begin{center}
+        \begin{tabular}{|a|b|c|d|e|f|}
+        \hline
+        \hspace{1em}\textbf{Project}\hspace{1em} & Productivity & Productivity & Creativity & Teamwork & Staff\\
+        \hspace{1em}\textbf{Name}\hspace{1em} &(total)&(average)&(average)&(average)&Members\\
+        \hline
+        Au & 420& 70.00& 58.83& 57.83& \textbf{6},13,19,33,45,47\\
+        Br & 420& 70.00& 71.33& 60.33& \textbf{2},11,29,31,34,47\\
+        Cs & 420& 70.00& 60.83& 60.67& \textbf{3},11,19,39,47,48\\
+        Dy & 420& 70.00& 51.50& 59.50& \textbf{5},38,40,41,44,48\\
+        Eu & 420& 70.00& 78.33& 60.17& \textbf{1},9,15,36,38,40\\
+        \hline
+        \textbf{Total} & 2100& 70.00& 64.16& 59.70& \\
+        \hline
+        \end{tabular}
+        %\caption{zVal = 5123}
+    \end{center}
+\end{table}
+
+\section{Executive Summary}
+The project \textbf{Multi-period Team Assignment Planning} that was trusted to me to handle is done. Remember that every staff members have a productivity, creativity, and teamwork score. Thus, I had to do very careful mathematical modeling and calculation to ensure the best output.
+
+From the table in \textbf{Section 5. Result}, we can conclude that it is possible to create such teams that need to satisfy several conditions (refer to \textbf{Section 2. Project Description and Guide} on page 2) to maximize the total productivity. Hence, I introduced a strategy to get the best output so that \textit{EndGameSolutions} can assign the available staff members and maximize their productivity.
+
+Recall that the goal is to maximize the total productivity of the available staff members. The table that I provided is the best strategy to maximize productivity with the best average productivity, creativity, and teamwork scores. The scores on the table met the required minimum where at least the average score for productivity is 70. Also, the average creativity and teamwork scores are both above 50. We also have a nice even spread of staff members in each project. With six staff members in a project, there is at least one senior staff member to help and lead the team. Therefore, all of the constraints are met and we have a nice optimal solution to the problems.
+
+Although it is clear that the scores in the table are similar, and there is no significant difference among the teams, notice that Project Eu has the best team compared to the other projects in terms of creativity. The total productivity and average productivity score of this team are equal to the others, but this team that is led by senior staff member \textbf{1} has the highest average creativity score with a score of 78.33. In terms of teamwork, Project Cs has the best team with the average teamwork score of 60.67.
+
+In conclusion, I suggest \textit{EndGameSolutions} use the provided strategy to maximize the total productivity of the available staff members in each project. That is, assign staff members \textbf{6},13,19,33,45,47 to \textbf{Project} \textbf{Au}, \textbf{2},11,29,31,34,47 to \textbf{Project} \textbf{Br}, \textbf{3},11,19,39,47,48 to \textbf{Project} \textbf{Cs}, \textbf{5},38,40,41,44,48 to \textbf{Project} \textbf{Dy}, and \textbf{1},9,15,36,38,40 to \textbf{Project} \textbf{Eu}.
+
+
+
+
+
+\pagebreak
+\begin{comment}
+\textbf{First strategy}
+\begin{table}[h!]
+    \begin{center}
+        \begin{tabular}{|a|b|c|d|e|f|}
+        \hline
+        \textbf{Project} & Total Productivity & Productivity & Creativity & Teamwork & Staff Members\\
+        \hline
+        Au & 621& 77.63& 52.50& 49.25& \textbf{3},\textbf{6},14,31,35,45,47,48\\
+        Br & 224& 74.60& 59.60& 48.00& \textbf{6},31,47\\
+        Cs & 866& 72.17& 53.67& 42.83& \textbf{1},\textbf{2},\textbf{6},\textbf{8},9,14,31,37,45,46,47,48\\
+        Dy & 664& 66.40& 58.60& 46.80& \textbf{2},\textbf{5},\textbf{6},16,17,28,31,32,40,47\\
+        Eu & 471& 67.29& 48.71& 56.28& \textbf{7},17,18,32,33,41,48\\
+        \hline
+        \textbf{Total} & \textbf{2846}& \textbf{71.62}& 54.61& \textbf{48.63} & \\
+        \hline
+        \end{tabular}
+        \caption{Everything is in terms of average score except for the total productivity.}
+    \end{center}
+\end{table}
+
+
+\textbf{First strategy}
+\begin{table}[h!]
+    \begin{center}
+        \begin{tabular}{|a|b|c|d|e|f|}
+        \hline
+        \textbf{Project} & Total Productivity & Productivity & Creativity & Teamwork & Staff Members\\
+        \hline
+        Au & 432& 72.00& 58.30& 30.00& \textbf{6},\textbf{8},21,28,43,47\\
+        Br & 486& 69.42& 63.86& 43.14& \textbf{1},\textbf{8},21,28,34,43,47\\
+        Cs & 432& 72.00& 58.30& 30.00& \textbf{6},\textbf{8},21,28,43,47\\
+        Dy & 969& 69.21& 54.36& 46.00& \textbf{1},\textbf{8},14,17,21,31,32,37,38,40,42,\\
+        &&&&&43,47,48\\
+        Eu & 1186& 69.77& 54.59& 46.47& \textbf{3},\textbf{5},\textbf{8},16,17,21,28,31,32,37,38,\\
+        &&&&&40,42,43,47,48,49\\
+        \hline
+        \textbf{Total} & \textbf{3505}& \textbf{70.48}& 57.88& 39.12 & \\
+        \hline
+        \end{tabular}
+        \caption{The best total and average productivity, but team size is too big and the teamwork is too low.}
+    \end{center}
+\end{table}
+
+
+\textbf{Second strategy}
+\begin{table}[h!]
+    \begin{center}
+        \begin{tabular}{|a|b|c|d|e|f|}
+        \hline
+        \textbf{Project} & Total Productivity & Productivity & Creativity & Teamwork & Staff Members\\
+        \hline
+        Au & 361& 72.20& 67.4& 29& \textbf{6},21,28,43,47\\
+        Br & 418& 69.67& 69.67& 42.30& \textbf{3},21,28,34,43,47\\
+        Cs & 337& 67.4& 55.6& 31.00& \textbf{8},21,28,43,47\\
+        Dy & 700& 70& 50.9& 52.40& \textbf{1},14,17,31,32,37,38,40,42,48\\
+        Eu & 750& 68.18& 52.82& 53.36& \textbf{5},16,17,31,32,37,38,40,42,48,49\\
+        \hline
+        \textbf{Total} & 2566& 69.49& \textbf{59.28}& 41.61 & \\
+        \hline
+        \end{tabular}
+        \caption{Eliminates the issues from the first strategy, but decreases the total productivity.}
+    \end{center}
+\end{table}
+
+\textbf{Third strategy}
+\begin{table}[h!]
+    \begin{center}
+        \begin{tabular}{|a|b|c|d|e|f|}
+        \hline
+        \textbf{Project} & Total Productivity & Productivity & Creativity & Teamwork & Staff Members\\
+        \hline
+        Au & 410& 68.33& 66.16& 40.17& \textbf{4},\textbf{6},21,28,43,47\\
+        Br & 418& 69.67& 69.67& 42.30& \textbf{3},21,28,34,43,47\\
+        Cs & 397& 66.17& 51.50& 41.50& \textbf{7},\textbf{8},21,28,43,47\\
+        Dy & 700& 70.00& 50.90& 52.40& \textbf{1},14,17,31,32,37,38,40,42,48\\
+        Eu & 750& 68.18& 52.82& 53.36& \textbf{5},16,17,31,32,37,38,40,42,48,49\\
+        \hline
+        \textbf{Total} & 2675& 68.47& 58.21& \textbf{45.95} & \\
+        \hline
+        \end{tabular}
+        \caption{The most balanced output, eliminates the issues from the first two strategys.}
+    \end{center}
+\end{table}
+
+
+PRE-FINAL TABLE
+\begin{table}[h!]
+    \begin{center}
+        \begin{tabular}{|a|b|c|d|e|f|}
+        \hline
+        \hspace{1em}\textbf{Project}\hspace{1em} & Productivity & Productivity & Creativity & Teamwork & Staff\\
+        \hspace{1em}\textbf{Name}\hspace{1em} &(total)&(average)&(average)&(average)&Members\\
+        \hline
+        Au & 422& 70.33& 50.33& 50.17& \textbf{6},14,30,37,41,48\\
+        Br & 431& 71.83& 50.00& 50.00& \textbf{1},2,7,16,40,48\\
+        Cs & 420& 70.00& 50.50& 50.00& \textbf{3},18,35,41,47,48\\
+        Dy & 422& 70.33& 50.00& 50.00& \textbf{4},31,32,42,43,44\\
+        Eu & 420& 70.00& 50.33& 50.00& \textbf{8},10,12,24,26,37\\
+        \hline
+        \textbf{Total} & 2115& 70.49& 50.23& 50.03& \\
+        \hline
+        \end{tabular}
+        %\caption{zVal = 5123}
+    \end{center}
+\end{table}
+\end{comment}
+\end{document}
